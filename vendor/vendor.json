@@ -1,0 +1,31 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "Hr1S1SeCF8tn6qL8hc0fmxpNlSs=",
+			"path": "github.com/docker/docker/pkg/namesgenerator",
+			"revision": "7a97705b52e7f5c65d31870579cb1dcc09506d89",
+			"revisionTime": "2017-01-20T23:13:18Z"
+		},
+		{
+			"checksumSHA1": "lThih54jzz9A4zHKEFb9SIV3Ed0=",
+			"path": "github.com/docker/docker/pkg/random",
+			"revision": "7a97705b52e7f5c65d31870579cb1dcc09506d89",
+			"revisionTime": "2017-01-20T23:13:18Z"
+		},
+		{
+			"checksumSHA1": "g/V4qrXjUGG9B+e3hB+4NAYJ5Gs=",
+			"path": "github.com/gorilla/context",
+			"revision": "08b5f424b9271eedf6f9f0ce86cb9396ed337a42",
+			"revisionTime": "2016-08-17T18:46:32Z"
+		},
+		{
+			"checksumSHA1": "F5dR3/i70EhSIMZfeIV+H8/PtvM=",
+			"path": "github.com/gorilla/mux",
+			"revision": "392c28fe23e1c45ddba891b0320b3b5df220beea",
+			"revisionTime": "2017-01-18T13:43:44Z"
+		}
+	],
+	"rootPath": "github.com/zerok/go-dojo-pairs"
+}

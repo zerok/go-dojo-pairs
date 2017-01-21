@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <style>
+            .card {
+                width: 100px;
+                height: 100px;
+                border: 1px solid #CCC;
+                margin: 5px;
+                box-sizing: border-box;
+                float: left;
+                font-size: 10px;
+                text-align: center;
+                line-height: 100px;
+                display: block;
+            }
+
+            #container {
+                width: 550px;
+                margin: auto;
+            }
+            table {
+                width: 200px;
+                margin: auto;
+            }
+            td {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Current player: <span id="currentPlayer"></span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Player 1</th>
+                    <th>Player 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="scorePlayer1">0</td>
+                    <td id="scorePlayer2">0</td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="container">
+            
+        </div>
+    <script>
+
+    var openCards = [];
+    var turnCards = [];
+
+
+    function initBoard() {
+        const container = document.getElementById("container");
+        let boardLocked = false;
+
+        fetch("/api/status/").then(resp => {
+            return resp.json();
+        }).then(data => {
+            document.getElementById("currentPlayer").innerHTML = data.CurrentPlayer + 1;
+            data.Scores.forEach((score, player) => {
+                document.getElementById(`scorePlayer${player+1}`).innerHTML = score;
+            });
+            data.SolvedCards.forEach((card, cardId) => {
+                let e = document.createElement("div");
+                e.setAttribute("class", "card");
+                if (data.Turned === cardId) {
+                    turnCards.push(e);
+                    e.innerHTML = data.TurnedCard;
+                } else {
+                    e.innerHTML = card;
+                }
+                e.addEventListener("click", function(cardId, evt) {
+                    evt.preventDefault();
+                    if (boardLocked) {
+                        return;
+                    }
+                    boardLocked = true;
+                    fetch("/api/pick/" + cardId, {credentials: "same-origin"}).then(resp => {
+                        return resp.json();
+                    }).then(data => {
+                        turnCards.push(e);
+                        document.getElementById(`scorePlayer${data.Player+1}`).innerHTML = data.NewScore;
+                        document.getElementById("currentPlayer").innerHTML = data.NextTurnPlayer + 1;
+                        this.innerHTML = data.Card;
+                        if (data.TurnComplete) {
+                            if (!data.MatchFound) {
+                                window.setTimeout(() => {
+                                    turnCards.forEach(e => {
+                                        e.innerHTML = "";
+                                    });
+                                    turnCards = [];
+                                    boardLocked = false;
+                                }, 2000)
+                            } else {
+                                turnCards.forEach(c => {
+                                    openCards.push(c);
+                                });
+                                turnCards = [];
+                                boardLocked = false;
+                            }
+                        } else {
+                            boardLocked = false;
+                        }
+                    })
+                }.bind(e, cardId));
+                container.appendChild(e);
+            })
+        });
+    }
+
+    initBoard();
+    </script>
+    </body>
+</html>
