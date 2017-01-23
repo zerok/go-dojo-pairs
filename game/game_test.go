@@ -3,7 +3,7 @@ package game
 import "testing"
 
 func TestNewGame(t *testing.T) {
-	var g GameOfPairs
+	var g PairsGame
 	var err error
 	_, err = NewGame(0)
 	if err == nil {
